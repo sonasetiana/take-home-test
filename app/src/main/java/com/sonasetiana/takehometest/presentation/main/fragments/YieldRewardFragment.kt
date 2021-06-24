@@ -59,7 +59,13 @@ class YieldRewardFragment: Fragment(), TabLayout.OnTabSelectedListener {
         setupViewModel()
     }
 
-    override fun onTabSelected(tab: TabLayout.Tab?) {
+    override fun onTabSelected(tab: TabLayout.Tab?) = filter()
+
+    override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
+
+    override fun onTabReselected(tab: TabLayout.Tab?) = filter()
+
+    private fun filter(){
         when(binding?.tabPeriod?.selectedTabPosition){
             0 -> "1W"
             1 -> "1M"
@@ -69,13 +75,15 @@ class YieldRewardFragment: Fragment(), TabLayout.OnTabSelectedListener {
             5 -> "10Y"
             else -> "All"
         }.run {
-            productAdapter.setPeriod(this)
+            if(equals("All", true)) {
+                binding?.tabPeriod?.showPopup(requireActivity()){
+                    productAdapter.setPeriod(it)
+                }
+            }else{
+                productAdapter.setPeriod(this)
+            }
         }
     }
-
-    override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
-
-    override fun onTabReselected(tab: TabLayout.Tab?) = Unit
 
     private fun requestData(){
         with(mainViewModel){

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="1D" />
+    <item
+        android:title="1W" />
+    <item
+        android:title="1M" />
+    <item
+        android:title="3M" />
+    <item
+        android:title="6M" />
+    <item
+        android:title="1Y" />
+    <item
+        android:title="2Y" />
+    <item
+        android:title="3Y" />
+    <item
+        android:title="4Y" />
+    <item
+        android:title="5Y" />
+    <item
+        android:title="10Y" />
+</menu>
