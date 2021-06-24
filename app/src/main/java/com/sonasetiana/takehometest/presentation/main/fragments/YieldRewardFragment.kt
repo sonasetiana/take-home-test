@@ -1,5 +1,6 @@
 package com.sonasetiana.takehometest.presentation.main.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,9 +16,7 @@ import com.sonasetiana.takehometest.datasource.main.MainDataSource
 import com.sonasetiana.takehometest.datasource.main.MainRepository
 import com.sonasetiana.takehometest.presentation.main.MainViewModel
 import com.sonasetiana.takehometest.presentation.main.adapter.YieldRewardAdapter
-import com.sonasetiana.takehometest.utils.AxisRightFormatter
-import com.sonasetiana.takehometest.utils.toAXisValueFormatter
-import com.sonasetiana.takehometest.utils.toLineDataSet
+import com.sonasetiana.takehometest.utils.*
 
 class YieldRewardFragment: Fragment(), TabLayout.OnTabSelectedListener {
 
@@ -89,6 +88,7 @@ class YieldRewardFragment: Fragment(), TabLayout.OnTabSelectedListener {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setupViewModel(){
         binding?.apply {
             with(mainViewModel){
@@ -105,13 +105,25 @@ class YieldRewardFragment: Fragment(), TabLayout.OnTabSelectedListener {
                             else -> "#E0E8EE"
                         }
                         dataSet.add(item.data.toLineDataSet(mColor = color))
+                        dataSet.add(item.data.toCenterLineDataSet(mColor = color))
                     }
 
+                    items.toDataLegend().let { legend ->
+                        txtFirst.text = "${legend["first"]}%"
+                        txtCenter.text = "${legend["center"]}%"
+                        txtLast.text = "${legend["last"]}%"
+                        txtDate.text = legend["date"].toString()
+                    }
+
+                    lineChart.legend.isEnabled = false
                     lineChart.data = LineData(dataSet)
                     lineChart.axisLeft.isEnabled = false
                     lineChart.axisRight.valueFormatter = AxisRightFormatter()
+                    lineChart.axisRight.setDrawGridLines(false)
                     lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
                     lineChart.xAxis.valueFormatter = items.toAXisValueFormatter()
+                    lineChart.xAxis.setDrawGridLines(false)
+                    lineChart.description.isEnabled = false
                     lineChart.animateXY(100, 500)
                 })
                 errorGetChartData().observe(viewLifecycleOwner, {

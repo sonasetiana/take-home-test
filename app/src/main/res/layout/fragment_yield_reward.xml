@@ -25,10 +25,91 @@
                     android:background="@color/white"
                     android:padding="@dimen/spacing_medium">
 
-                    <com.github.mikephil.charting.charts.LineChart
-                        android:id="@+id/line_chart"
+                    <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="200dp" />
+                        android:layout_height="220dp">
+
+                        <com.github.mikephil.charting.charts.LineChart
+                            android:id="@+id/line_chart"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:layout_gravity="bottom"/>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:cardBackgroundColor="@color/background"
+                            app:cardCornerRadius="@dimen/spacing_small"
+                            app:cardPreventCornerOverlap="true"
+                            app:cardUseCompatPadding="false"
+                            app:cardElevation="0dp">
+
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:orientation="horizontal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="@dimen/spacing_normal">
+
+                                <com.google.android.material.textview.MaterialTextView
+                                    android:id="@+id/txt_first"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:drawableStart="@drawable/ic_dot_green"
+                                    android:drawablePadding="@dimen/spacing_small"
+                                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                                    android:fontFamily="@font/montserrat_regular"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/black"
+                                    android:text="18%"/>
+
+                                <Space
+                                    android:layout_width="@dimen/spacing_normal"
+                                    android:layout_height="wrap_content"/>
+
+                                <com.google.android.material.textview.MaterialTextView
+                                    android:id="@+id/txt_center"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:drawableStart="@drawable/ic_dot_violet"
+                                    android:drawablePadding="@dimen/spacing_small"
+                                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                                    android:fontFamily="@font/montserrat_regular"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/black"
+                                    android:text="18%"/>
+
+                                <Space
+                                    android:layout_width="@dimen/spacing_normal"
+                                    android:layout_height="wrap_content"/>
+
+                                <com.google.android.material.textview.MaterialTextView
+                                    android:id="@+id/txt_last"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:drawableStart="@drawable/ic_dot_navy"
+                                    android:drawablePadding="@dimen/spacing_small"
+                                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                                    android:fontFamily="@font/montserrat_regular"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/black"
+                                    android:text="18%"/>
+
+                                <Space
+                                    android:layout_width="@dimen/spacing_normal"
+                                    android:layout_height="wrap_content"/>
+
+                                <com.google.android.material.textview.MaterialTextView
+                                    android:id="@+id/txt_date"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                                    android:fontFamily="@font/montserrat_regular"
+                                    android:text="(20 Jan 2020)"/>
+
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        </com.google.android.material.card.MaterialCardView>
+                    </FrameLayout>
 
                     <com.google.android.material.tabs.TabLayout
                         android:id="@+id/tab_period"
