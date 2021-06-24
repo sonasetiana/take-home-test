@@ -6,12 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.google.android.material.tabs.TabLayout
 import com.sonasetiana.takehometest.databinding.FragmentYieldRewardBinding
 import com.sonasetiana.takehometest.datasource.main.MainDataSource
 import com.sonasetiana.takehometest.datasource.main.MainRepository
 import com.sonasetiana.takehometest.presentation.main.MainViewModel
 import com.sonasetiana.takehometest.presentation.main.adapter.YieldRewardAdapter
+import com.sonasetiana.takehometest.utils.AxisRightFormatter
+import com.sonasetiana.takehometest.utils.toAXisValueFormatter
+import com.sonasetiana.takehometest.utils.toLineDataSet
 
 class YieldRewardFragment: Fragment(), TabLayout.OnTabSelectedListener {
 
@@ -48,6 +54,7 @@ class YieldRewardFragment: Fragment(), TabLayout.OnTabSelectedListener {
                 requestData()
             }
             rvProducts.adapter = productAdapter
+
         }
         setupViewModel()
     }
@@ -88,8 +95,24 @@ class YieldRewardFragment: Fragment(), TabLayout.OnTabSelectedListener {
                 loadingGetChartData().observe(viewLifecycleOwner, {
 
                 })
-                successGetChartData().observe(viewLifecycleOwner, {
+                successGetChartData().observe(viewLifecycleOwner, { items ->
+                    val dataSet = ArrayList<ILineDataSet>()
+                    (0 until items.size).forEach {
+                        val item = items[it]
+                        val color = when(it){
+                            0 -> "#E2EBDD"
+                            1 -> "#E0DBEB"
+                            else -> "#E0E8EE"
+                        }
+                        dataSet.add(item.data.toLineDataSet(mColor = color))
+                    }
 
+                    lineChart.data = LineData(dataSet)
+                    lineChart.axisLeft.isEnabled = false
+                    lineChart.axisRight.valueFormatter = AxisRightFormatter()
+                    lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+                    lineChart.xAxis.valueFormatter = items.toAXisValueFormatter()
+                    lineChart.animateXY(100, 500)
                 })
                 errorGetChartData().observe(viewLifecycleOwner, {
 

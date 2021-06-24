@@ -23,8 +23,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
-                    android:padding="@dimen/spacing_medium"
-                    android:visibility="visible">
+                    android:padding="@dimen/spacing_medium">
+
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/line_chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp" />
 
                     <com.google.android.material.tabs.TabLayout
                         android:id="@+id/tab_period"
