@@ -136,7 +136,8 @@
                         android:id="@+id/tab_period"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:tabTextAppearance="@style/tab_style"
+                        app:tabTextAppearance="@style/tab_text_style"
+                        android:layout_marginTop="@dimen/spacing_normal"
                         app:tabGravity="center"
                         app:tabMode="fixed">
 
