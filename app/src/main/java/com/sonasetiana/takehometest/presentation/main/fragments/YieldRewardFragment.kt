@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.github.mikephil.charting.components.XAxis
@@ -92,9 +93,17 @@ class YieldRewardFragment: Fragment(), TabLayout.OnTabSelectedListener {
     private fun setupViewModel(){
         binding?.apply {
             with(mainViewModel){
-                loadingGetChartData().observe(viewLifecycleOwner, {
-
+                loadingGetChartData().observe(viewLifecycleOwner, { isLoading ->
+                    if(isLoading){
+                        lineChart.isGone = true
+                        centerLine.isGone = true
+                        cardLegend.isGone = true
+                        chartProgress.show()
+                    }else{
+                        chartProgress.hide()
+                    }
                 })
+
                 successGetChartData().observe(viewLifecycleOwner, { items ->
                     val dataSet = ArrayList<ILineDataSet>()
                     (0 until items.size).forEach {
@@ -115,29 +124,48 @@ class YieldRewardFragment: Fragment(), TabLayout.OnTabSelectedListener {
                         txtDate.text = legend["date"].toString()
                     }
 
-                    lineChart.legend.isEnabled = false
-                    lineChart.data = LineData(dataSet)
-                    lineChart.axisLeft.isEnabled = false
-                    lineChart.axisRight.valueFormatter = AxisRightFormatter()
-                    lineChart.axisRight.setDrawGridLines(false)
-                    lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
-                    lineChart.xAxis.valueFormatter = items.toAXisValueFormatter()
-                    lineChart.xAxis.setDrawGridLines(false)
-                    lineChart.description.isEnabled = false
-                    lineChart.animateXY(100, 500)
+                    lineChart.apply {
+                        legend.isEnabled = false
+                        data = LineData(dataSet)
+                        axisLeft.isEnabled = false
+                        axisRight.valueFormatter = AxisRightFormatter()
+                        axisRight.setDrawAxisLine(false)
+                        xAxis.position = XAxis.XAxisPosition.BOTTOM
+                        xAxis.valueFormatter = items.toAXisValueFormatter()
+                        xAxis.setDrawGridLines(false)
+                        description.isEnabled = false
+                    }.run {
+                        animateXY(100, 500)
+                    }
+                    lineChart.isGone = false
+                    centerLine.isGone = false
+                    cardLegend.isGone = false
                 })
+
                 errorGetChartData().observe(viewLifecycleOwner, {
-
+                    lineChart.isGone = false
+                    requireActivity().toast(it.error_message)
                 })
 
-                loadingGetProductDetail().observe(viewLifecycleOwner, {
-
+                loadingGetProductDetail().observe(viewLifecycleOwner, { isLoading ->
+                    if(isLoading){
+                        rvProducts.isGone = true
+                        txtNoData.isGone = true
+                        rvProgress.show()
+                    }else{
+                        rvProgress.hide()
+                    }
                 })
+
                 successGetProductDetail().observe(viewLifecycleOwner, {
                     productAdapter.setItems(it)
+                    rvProducts.isGone = false
+                    txtNoData.isGone = it.isNotEmpty()
                 })
-                errorGetProductDetail().observe(viewLifecycleOwner, {
 
+                errorGetProductDetail().observe(viewLifecycleOwner, {
+                    txtNoData.isGone = false
+                    requireActivity().toast(it.error_message)
                 })
 
                 requestData()
