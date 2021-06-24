@@ -19,7 +19,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/white"
-                app:navigationIcon="@drawable/ic_nav_toolbar"/>
+                app:titleTextAppearance="@style/tollbar_title_style"
+                app:navigationIcon="@drawable/ic_nav_toolbar"
+                app:title="Perbandingan"/>
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout"

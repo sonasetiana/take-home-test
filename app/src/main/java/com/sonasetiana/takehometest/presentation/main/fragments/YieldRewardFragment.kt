@@ -6,18 +6,28 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.tabs.TabLayout
 import com.sonasetiana.takehometest.databinding.FragmentYieldRewardBinding
 import com.sonasetiana.takehometest.datasource.main.MainDataSource
 import com.sonasetiana.takehometest.datasource.main.MainRepository
 import com.sonasetiana.takehometest.presentation.main.MainViewModel
+import com.sonasetiana.takehometest.presentation.main.adapter.YieldRewardAdapter
 
-class YieldRewardFragment: Fragment() {
+class YieldRewardFragment: Fragment(), TabLayout.OnTabSelectedListener {
 
     private var binding : FragmentYieldRewardBinding? = null
 
-    private val mainRepository by lazy { MainRepository(MainDataSource.create()) }
+    private val mainRepository by lazy {
+        MainRepository(MainDataSource.create())
+    }
 
-    private val mainViewModel by lazy { ViewModelProvider(requireActivity())[MainViewModel::class.java] }
+    private val mainViewModel by lazy {
+        ViewModelProvider(requireActivity())[MainViewModel::class.java]
+    }
+
+    private val productAdapter by lazy {
+        YieldRewardAdapter()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,30 +41,34 @@ class YieldRewardFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainViewModel.initRepository(mainRepository)
-        with(mainViewModel){
-            loadingGetChartData().observe(viewLifecycleOwner, {
+        binding?.apply { 
+            tabPeriod.addOnTabSelectedListener(this@YieldRewardFragment)
+            swipeRefresh.setOnRefreshListener {
+                swipeRefresh.isRefreshing = false
+                requestData()
+            }
+            rvProducts.adapter = productAdapter
+        }
+        setupViewModel()
+    }
 
-            })
-            successGetChartData().observe(viewLifecycleOwner, {
-
-            })
-            errorGetChartData().observe(viewLifecycleOwner, {
-
-            })
-
-            loadingGetProductDetail().observe(viewLifecycleOwner, {
-
-            })
-            successGetProductDetail().observe(viewLifecycleOwner, {
-
-            })
-            errorGetProductDetail().observe(viewLifecycleOwner, {
-
-            })
-
-            requestData()
+    override fun onTabSelected(tab: TabLayout.Tab?) {
+        when(binding?.tabPeriod?.selectedTabPosition){
+            0 -> "1W"
+            1 -> "1M"
+            2 -> "1Y"
+            3 -> "3Y"
+            4 -> "5Y"
+            5 -> "10Y"
+            else -> "All"
+        }.run {
+            productAdapter.setPeriod(this)
         }
     }
+
+    override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
+
+    override fun onTabReselected(tab: TabLayout.Tab?) = Unit
 
     private fun requestData(){
         with(mainViewModel){
@@ -65,6 +79,34 @@ class YieldRewardFragment: Fragment() {
             )
             getChartData(params)
             getProductDetail(params)
+        }
+    }
+
+    private fun setupViewModel(){
+        binding?.apply {
+            with(mainViewModel){
+                loadingGetChartData().observe(viewLifecycleOwner, {
+
+                })
+                successGetChartData().observe(viewLifecycleOwner, {
+
+                })
+                errorGetChartData().observe(viewLifecycleOwner, {
+
+                })
+
+                loadingGetProductDetail().observe(viewLifecycleOwner, {
+
+                })
+                successGetProductDetail().observe(viewLifecycleOwner, {
+                    productAdapter.setItems(it)
+                })
+                errorGetProductDetail().observe(viewLifecycleOwner, {
+
+                })
+
+                requestData()
+            }
         }
     }
 
